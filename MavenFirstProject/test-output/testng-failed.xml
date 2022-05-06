@@ -5,7 +5,7 @@
     <classes>
       <class name="ddt.ExcelReading">
         <methods>
-          <include name="getSheetCount"/>
+          <include name="updateExcel"/>
         </methods>
       </class> <!-- ddt.ExcelReading -->
     </classes>

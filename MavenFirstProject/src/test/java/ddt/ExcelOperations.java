@@ -1,6 +1,7 @@
 package ddt;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -158,39 +159,77 @@ public class ExcelOperations {
 
 	}
 
-	public void getCellValue(String path,String sheetName,int cellNum) throws IOException {
+	public String getCellValue(String path,String sheetName,int rowNum,int cellNum) {
 		
 		/* Identify the path and name of excel file */
-		FileInputStream fis = new FileInputStream(path);
+		FileInputStream fis=null;
+		try {
+			fis = new FileInputStream(path);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		/* Create an instance of required workbook class */
-		Workbook workbook = new XSSFWorkbook(fis);
+		Workbook workbook=null;
+		try {
+			workbook = new XSSFWorkbook(fis);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		Sheet sheet=workbook.getSheet(sheetName);
 		
-		int rowCount=sheet.getLastRowNum();
-		for(int i=0;i<rowCount;i++){
-			
-			Row row=sheet.getRow(i);
+			Row row=sheet.getRow(rowNum);
 			/* switch to check cell type and read the content accordingly */
 			switch (row.getCell(cellNum).getCellType()) {
-
 			case Cell.CELL_TYPE_STRING:
-				System.out.println("Cell contents are :" + row.getCell(cellNum).getStringCellValue());
-				break;
+				return row.getCell(cellNum).getStringCellValue();
 			case Cell.CELL_TYPE_NUMERIC:
-				System.out.println("Cell contents are :" + (int) row.getCell(cellNum).getNumericCellValue());
-				break;
+				return ""+(int) row.getCell(cellNum).getNumericCellValue();
 			default:
-				System.out.println("No matching cell found");
-				break;
-			}
+				return null;
 		}		
-	}	
+	}
+	
+	public void updateCellValue(String path,String sheetName,int rowNum,int cellNum,String input) {
+		/* Identify the path and name of excel file */
+		FileInputStream fis=null;
+		try {
+			fis = new FileInputStream(path);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		/* Create an instance of required workbook class */
+		Workbook workbook=null;
+		try {
+			workbook = new XSSFWorkbook(fis);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Sheet sheet=workbook.getSheet(sheetName);
+		
+			Row row=sheet.getRow(rowNum);
+			
+			row.createCell(cellNum).setCellValue(input);
+			FileOutputStream fos=null;
+			try {
+				fos = new FileOutputStream(path);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			try {
+				workbook.write(fos);
+				fos.flush();
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
 	
 	@Test
 	public void getFirstCellValueFromEachRow() throws IOException{
 		
-		getCellValue(".\\TestData\\DDT.xlsx", "Sheet1", 0);
+		//getCellValue(".\\TestData\\DDT.xlsx", "Sheet1", 0);
 	}
 	
 	@Test
@@ -213,10 +252,7 @@ public class ExcelOperations {
 		
 	}
 	
-	@Test 
-	public void updateCellValue(){
-		
-	}
+
 	
 	@Test 
 	public void createAndInsertValueInCell(){

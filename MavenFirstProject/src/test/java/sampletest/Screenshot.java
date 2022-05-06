@@ -30,9 +30,9 @@ public class Screenshot extends SeleniumUtility {
 	}
 	@Test
 	public void testScreenShot2() {
-		setUp("chrome", "https://demo.actitime.com/login.do");
-		String pageTile=getCurrentTitleOfApplication();
-		takeScreenShotOfThePage(".\\src\\test\\resources\\ScreenShots\\"+pageTile+".jpg");
+		setUp("chrome", "https://www.google.com");
+		String title=driver.getTitle();
+		takeScreenShotOfThePage(".\\src\\test\\resources\\ScreenShots\\"+title+".jpg");
 		cleanUp();
 	}
 }
