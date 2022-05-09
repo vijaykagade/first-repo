@@ -25,11 +25,11 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class SeleniumUtility {
 	public static WebDriver driver;
-	protected Properties properties;
-	protected Actions action;
-	protected FileInputStream fis;
+	protected static Properties properties;
+	protected static Actions action;
+	protected static FileInputStream fis;
 	protected static String filePath;
-	protected WebDriverWait wait;
+	protected static WebDriverWait wait;
 	/**
 	 * using this method we can load our property and also open desired browser
 	 */
@@ -47,6 +47,7 @@ public class SeleniumUtility {
 		}
 		if (browserName.equalsIgnoreCase("chrome")) {
 			WebDriverManager.chromedriver().setup();
+			//System.setProperty("webdriver.chrome.driver", ".\\executables\\chromedriver.exe");
 			driver = new ChromeDriver();
 		} else if (browserName.equalsIgnoreCase("firefox")) {
 			WebDriverManager.firefoxdriver().setup();
